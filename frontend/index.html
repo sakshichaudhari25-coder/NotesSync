@@ -1,229 +1,93 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="A calm, collaborative space for writing and organizing Markdown notes."
-    />
-    <title>NoteSync — your writing space</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css"
-    />
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <aside class="sidebar" aria-label="Notes sidebar">
-        <a class="brand" href="#" aria-label="NoteSync home">
-          <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none">
-              <path
-                d="M8 5.5h10.5L24 11v15.5H8V5.5Z"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linejoin="round"
-              />
-              <path d="M18 5.5V11h6M12 16h8M12 20h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-              <path d="M5 9v18h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
-          </span>
-          <span class="brand-name">Note<span>Sync</span></span>
-        </a>
 
-        <button class="button button-primary new-note-button" id="new-note-button" type="button">
-          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
-            <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          </svg>
-          <span>New note</span>
-          <span class="shortcut-hint">N</span>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Markdown Notes App</title>
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>Markdown Notes</h1>
+    <p>Create, edit and share your notes</p>
+  </header>
+
+  <main class="container">
+
+    <section class="user-section">
+      <label for="author">Your Name</label>
+      <input
+        type="text"
+        id="author"
+        placeholder="Enter your name"
+      >
+    </section>
+
+    <div class="layout">
+
+      <!-- Notes List -->
+      <aside class="sidebar">
+
+        <div class="sidebar-header">
+          <h2>All Notes</h2>
+          <button id="refreshBtn">Refresh</button>
+        </div>
+
+        <button id="newNoteBtn" class="new-btn">
+          + New Note
         </button>
 
-        <div class="notes-heading">
-          <div>
-            <p class="eyebrow">YOUR WORKSPACE</p>
-            <h2>All notes <span class="note-count" id="note-count">0</span></h2>
-          </div>
-          <button
-            class="icon-button refresh-button"
-            id="refresh-notes-button"
-            type="button"
-            aria-label="Refresh notes"
-            title="Refresh notes"
-          >
-            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
-              <path d="M16.4 8A6.5 6.5 0 0 0 5 5.4L3.5 7M3.5 7V3.8M3.5 7h3.2M3.6 12a6.5 6.5 0 0 0 11.4 2.6l1.5-1.6m0 0v3.2m0-3.2h-3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+        <div id="notesList">
+          <p>Loading notes...</p>
+        </div>
+
+      </aside>
+
+      <!-- Editor -->
+      <section class="editor-section">
+
+        <h2>Note Editor</h2>
+
+        <input
+          type="text"
+          id="title"
+          placeholder="Enter note title"
+        >
+
+        <textarea
+          id="editor"
+          placeholder="Write your Markdown note here..."
+        ></textarea>
+
+        <div class="actions">
+          <button id="saveBtn" class="save-btn">
+            Save Note
+          </button>
+
+          <button id="deleteBtn" class="delete-btn">
+            Delete Note
           </button>
         </div>
 
-        <nav class="notes-list" id="notes-list" aria-label="Saved notes">
-          <div class="notes-placeholder" id="notes-placeholder">
-            <span class="placeholder-icon" aria-hidden="true">✦</span>
-            <p>Your notes will show up here.</p>
-            <button class="text-button" id="placeholder-new-note" type="button">Create your first note</button>
-          </div>
-        </nav>
+        <p id="message"></p>
 
-        <div class="sidebar-bottom">
-          <div class="sidebar-tip">
-            <span class="tip-icon" aria-hidden="true">✎</span>
-            <p>Good ideas deserve a place to grow.</p>
-          </div>
-          <div class="workspace-label">
-            <span class="workspace-avatar" aria-hidden="true">S</span>
-            <span>
-              <strong>Personal workspace</strong>
-              <small>Free plan</small>
-            </span>
-            <span class="online-dot" aria-label="Online"></span>
-          </div>
-        </div>
-      </aside>
+      </section>
 
-      <main class="main-content">
-        <header class="topbar">
-          <div class="breadcrumbs" aria-label="Breadcrumb">
-            <span>Workspace</span>
-            <span class="breadcrumb-divider" aria-hidden="true">/</span>
-            <strong>My notes</strong>
-          </div>
-          <div class="connection-status">
-            <span class="connection-dot" aria-hidden="true"></span>
-            <span>Ready to write</span>
-          </div>
-        </header>
-
-        <div class="content-wrap">
-          <section class="page-intro">
-            <div>
-              <p class="eyebrow">A LITTLE SPACE FOR BIG IDEAS</p>
-              <h1>Your writing space<span class="heading-period">.</span></h1>
-              <p class="page-subtitle">Capture a thought, shape an idea, make it yours.</p>
-            </div>
-            <div class="intro-decoration" aria-hidden="true">
-              <span class="decoration-sparkle sparkle-one">✳</span>
-              <span class="decoration-sparkle sparkle-two">✦</span>
-              <span class="decoration-circle"></span>
-            </div>
-          </section>
-
-          <div class="message-banner" id="message-banner" role="status" aria-live="polite" hidden>
-            <span class="message-icon" aria-hidden="true"></span>
-            <span id="message-text"></span>
-            <button class="message-dismiss" id="message-dismiss" type="button" aria-label="Dismiss message">
-              &times;
-            </button>
-          </div>
-
-          <section class="editor-card" aria-label="Note editor">
-            <div class="note-meta">
-              <label class="title-field">
-                <span class="sr-only">Note title</span>
-                <input
-                  id="note-title"
-                  name="title"
-                  type="text"
-                  placeholder="Give your note a title..."
-                  maxlength="120"
-                  autocomplete="off"
-                />
-              </label>
-              <label class="author-field">
-                <span class="author-label">BY</span>
-                <input
-                  id="note-author"
-                  name="author"
-                  type="text"
-                  value="Sakshi"
-                  placeholder="Your name"
-                  maxlength="80"
-                  autocomplete="name"
-                />
-              </label>
-              <label class="collaborators-field">
-                <span class="collaborators-label">WITH</span>
-                <input
-                  id="note-collaborators"
-                  name="collaborators"
-                  type="text"
-                  placeholder="Names separated by commas"
-                  aria-describedby="collaborators-help"
-                  autocomplete="off"
-                />
-                <span class="sr-only" id="collaborators-help">
-                  Enter collaborator names separated by commas.
-                </span>
-              </label>
-            </div>
-
-            <div class="editor-grid">
-              <section class="editor-panel" aria-labelledby="editor-heading">
-                <div class="panel-heading">
-                  <div class="panel-title">
-                    <span class="panel-indicator editor-indicator" aria-hidden="true"></span>
-                    <h2 id="editor-heading">Write</h2>
-                  </div>
-                  <span class="panel-hint">Markdown supported</span>
-                </div>
-                <textarea id="markdown-editor" aria-label="Write your note in Markdown"></textarea>
-              </section>
-
-              <section class="preview-panel" aria-labelledby="preview-heading">
-                <div class="panel-heading preview-heading">
-                  <div class="panel-title">
-                    <span class="panel-indicator preview-indicator" aria-hidden="true"></span>
-                    <h2 id="preview-heading">Preview</h2>
-                  </div>
-                  <span class="live-label"><span></span> LIVE</span>
-                </div>
-                <article class="markdown-preview" id="markdown-preview" aria-live="polite">
-                  <div class="preview-empty">
-                    <span aria-hidden="true">✧</span>
-                    <p>Your formatted note will appear here as you write.</p>
-                  </div>
-                </article>
-              </section>
-            </div>
-
-            <footer class="editor-footer">
-              <div class="footer-note">
-                <span class="keyboard-icon" aria-hidden="true">⌘</span>
-                <span>Your notes are saved to your workspace</span>
-              </div>
-              <div class="editor-actions">
-                <button class="button button-danger" id="delete-note-button" type="button" disabled>
-                  <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
-                    <path d="M4.5 6h11M8 6V4.5h4V6m2.5 0-.6 9.5H6.1L5.5 6m3 2.5v4m3-4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  Delete
-                </button>
-                <button class="button button-primary save-button" id="save-note-button" type="button">
-                  <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
-                    <path d="M4.5 3.5h9l2 2v11h-11v-13Zm3 0v4h5v-4m-5 13v-6h6v6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-                  </svg>
-                  Save note
-                  <span class="save-shortcut">⌘ S</span>
-                </button>
-              </div>
-            </footer>
-          </section>
-          <p class="page-footnote">Made for thoughts worth keeping <span aria-hidden="true">♡</span></p>
-        </div>
-      </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"></script>
-    <script src="./script.js"></script>
-  </body>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
 </html>
